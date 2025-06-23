@@ -15,7 +15,7 @@ RUN npm run build -- --configuration=production
 FROM nginx:alpine
 
 # Copy built app from builder
-COPY --from=builder /app/dist/simple-app1 /usr/share/nginx/html
+COPY --from=builder /app/dist/simple-app1/browser /usr/share/nginx/html
 
 # Optional: Replace default nginx config (if you need routing support)
 COPY nginx.conf /etc/nginx/conf.d/default.conf
