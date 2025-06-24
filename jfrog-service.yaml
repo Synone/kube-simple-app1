@@ -4,12 +4,12 @@ metadata:
   name: angular-app-service
 spec:
   selector:
-    app: simple-angular-app-deployment
+    app: angular-app-deployment
   ports:
     - protocol: TCP
       port: 80
       targetPort: 80
-      nodePort: 30020
+      nodePort: 30022
   type: NodePort # Or ClusterIp if you're running locally (e.g. Minikube)
   # If you're using a cloud provider, you might want to use LoadBalancer
   # type: LoadBalancer
