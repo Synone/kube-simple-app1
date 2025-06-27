@@ -8,7 +8,8 @@ import { Router } from "@angular/router";
   selector: 'app-login',
   imports: [ReactiveFormsModule, CommonModule],
   templateUrl: './login.component.html',
-  styleUrl: './login.component.css'
+  styleUrl: './login.component.css',
+  providers: [SimpleService]
 })
 export class LoginComponent {
 
@@ -25,6 +26,7 @@ export class LoginComponent {
     // Here you would typically handle the form submission,
     // such as sending the data to a server or updating a service.
     this.SimpleService.currentUserInfoSignal.set(this.loginForm.value);
+    this.SimpleService.saveUserInfo(this.loginForm.value);
     this.route.navigate(['/login-info']);
   }
 }

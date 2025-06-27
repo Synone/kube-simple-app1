@@ -1,0 +1,91 @@
+# # Namespace
+apiVersion: v1
+kind: Namespace
+metadata:
+  name: kube
+
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: express-api
+  namespace: kube
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      app: express-api
+  template:
+    metadata:
+      labels:
+        app: express-api
+    spec:
+      containers:
+        - name: express-api
+          image: sonyne/simple-express:v2.0.0
+          ports:
+            - containerPort: 3000
+          env:
+            - name: DB_HOST
+              valueFrom:
+                configMapKeyRef:
+                  name: express-config
+                  key: DB_HOST
+            - name: DB_PORT
+              valueFrom:
+                configMapKeyRef:
+                  name: express-config
+                  key: DB_PORT
+            - name: DB_USER
+              valueFrom:
+                configMapKeyRef:
+                  name: express-config
+                  key: DB_USER
+            - name: DB_NAME
+              valueFrom:
+                configMapKeyRef:
+                  name: express-config
+                  key: DB_NAME
+            - name: DB_PASSWORD
+              valueFrom:
+                secretKeyRef:
+                  name: postgres-secret
+                  key: DB_PASSWORD
+---
+# Service
+apiVersion: v1
+kind: Service
+metadata:
+  name: express-api-service
+  namespace: kube
+spec:
+  selector:
+    app: express-api
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 3000
+      nodePort: 30030
+  type: NodePort
+---
+# ConfigMap
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: express-config
+  namespace: kube
+data:
+  DB_HOST: postgres-service
+  DB_PORT: "5432"
+  DB_USER: appuser
+  DB_NAME: appdb
+---
+# Secret
+apiVersion: v1
+kind: Secret
+metadata:
+  name: postgres-secret
+  namespace: kube
+type: Opaque
+data:
+  DB_PASSWORD: c2VjcmV0MTIz # base64 encoded "secret123"

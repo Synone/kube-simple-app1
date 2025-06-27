@@ -9,7 +9,7 @@ import { SimpleService } from "../../simple.service";
 })
 export class LoginInfoComponent {
   constructor(private simpleService: SimpleService) {
-
+    this.simpleService.getUserInfo();
   }
   userInfo = computed(() => this.simpleService.currentUserInfoSignal());
 }

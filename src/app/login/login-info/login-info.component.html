@@ -1,15 +1,18 @@
 <div class="container">
   <div class="form-container">
     <h2>Login Info</h2>
-    <div class="row">
+    <ol>
+      @for(user of userInfo(); track user) {
+      <li>
+        <div class="user-info">
+          <p><strong>Email:</strong> {{ user.email }}</p>
+          <p><strong>Password:</strong> {{ user.password }}</p>
+        </div>
+      </li>
 
-      <div class="col-6">
-        Email: {{ userInfo()?.email }}
-      </div>
-      <div class="col-6">
-        Password: {{ userInfo()?.password }}
-      </div>
-    </div>
+      }
+
+    </ol>
 
   </div>
 </div>
