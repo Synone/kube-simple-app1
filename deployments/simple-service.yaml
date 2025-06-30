@@ -1,7 +1,7 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: angular-app-service
+  name: angular-frontend-service
   namespace: kube # Ensure this matches the namespace of your deploymen
 spec:
   selector:
