@@ -2,7 +2,7 @@ const express = require("express");
 const { Pool } = require("pg");
 const cors = require("cors");
 const app = express();
-// import { logger } from "./logger.js"; // Importing the logger
+const logger = require("./logger");
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 app.use(cors());
@@ -20,12 +20,13 @@ const pool = new Pool({
 
 // Health check
 app.get("/", (req, res) => {
+  logger.info("Health check endpoint hit");
   res.send("Express.js backend is running 🚀");
 });
 
 // Get all contacts
-app.get("/api/users", async (req, res) => {
-  console.log("info", "Received request to fetch contacts");
+app.get("/users", async (req, res) => {
+  logger.info("Received request to fetch contacts");
   try {
     const result = await pool.query("SELECT * FROM users ORDER BY id DESC");
 
@@ -37,9 +38,9 @@ app.get("/api/users", async (req, res) => {
 });
 
 // Add a new contact
-app.post("/api/users", async (req, res) => {
+app.post("/users", async (req, res) => {
   const { email, password } = req.body;
-  console.log("info", "Received request to add contact:", req.body);
+  logger.log("info", "Received request to add contact:", req.body);
   if (!password || !email) {
     return res.status(400).json({ error: "Email and password are required" });
   }
