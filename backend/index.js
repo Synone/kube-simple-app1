@@ -18,12 +18,6 @@ const pool = new Pool({
   ssl: false,
 });
 
-// Health check
-app.get("/", (req, res) => {
-  logger.info("Health check endpoint hit");
-  res.send("Express.js backend is running 🚀");
-});
-
 // Get all contacts
 app.get("/users", async (req, res) => {
   logger.info("Received request to fetch contacts");
@@ -56,7 +50,11 @@ app.post("/users", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
-
+// Health check
+app.get("/", (req, res) => {
+  logger.info("Health check endpoint hit");
+  res.status(200).json({ message: "Express.js backend is running 🚀" });
+});
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
