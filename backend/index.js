@@ -9,13 +9,13 @@ app.use(cors());
 const TEMP_DB_STRING = "postgres://appuser:s3cr3t@localhost:5432/appdb";
 // PostgreSQL connection pool using env vars (injected via Kubernetes secrets or local .env)
 const pool = new Pool({
-  host: process.env.DB_HOST || "localhost",
-  port: process.env.DB_PORT || 5432,
-  // connectionString: TEMP_DB_STRING,
-  user: process.env.DB_USER || "appuser",
-  password: process.env.DB_PASSWORD, // 👈 Password injected via Kubernetes Secret
-  database: process.env.DB_NAME || "appdb",
-  ssl: false,
+  // host: process.env.DB_HOST || "localhost",
+  // port: process.env.DB_PORT || 5432,
+  connectionString: TEMP_DB_STRING,
+  // user: process.env.DB_USER || "appuser",
+  // password: process.env.DB_PASSWORD, // 👈 Password injected via Kubernetes Secret
+  // database: process.env.DB_NAME || "appdb",
+  // ssl: false,
 });
 
 // Get all contacts
@@ -50,11 +50,66 @@ app.post("/users", async (req, res) => {
     res.status(500).json({ error: "Internal server error" });
   }
 });
+
+app.post("/dogs", async (req, res) => {
+  const {id, dog_name, breed, about, image_data } = req.body;
+  logger.info("Received request to add dog:", req.body);
+
+  if (!dog_name || !breed || !about || !image_data) {
+    return res.status(400).json({ error: "All fields are required" });
+  }
+
+  try {
+    const result = await pool.query(
+      "INSERT INTO dogs (id, dog_name, breed, about, image_data) VALUES ($1, $2, $3, $4, $5) RETURNING *",
+      [id, dog_name, breed, about, image_data]
+    );
+    res.status(201).json(result.rows[0]);
+  } catch (err) {
+    console.error("Error inserting dog:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.get("/dogs", async (req, res) => {
+  logger.info("Received request to fetch dogs");
+  try {
+    const result = await pool.query(
+      "SELECT * FROM dogs ORDER BY created_at DESC"
+    );
+    logger.info("Fetched dogs:", result.rows);
+    res.status(200).json(result.rows);
+  } catch (err) {
+    console.error("Error fetching dogs:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
+app.delete("/dogs/:id", async (req, res) => {
+  const { id } = req.params;
+  logger.info(`Received request to delete dog with ID: ${id}`);
+
+  try {
+    const result = await pool.query(
+      "DELETE FROM dogs WHERE id = $1 RETURNING *",
+      [id]
+    );
+    if (result.rowCount === 0) {
+      return res.status(404).json({ error: "Dog not found" });
+    }
+    res.status(200).json({ message: "Dog deleted successfully" });
+  } catch (err) {
+    console.error("Error deleting dog:", err);
+    res.status(500).json({ error: "Internal server error" });
+  }
+});
+
 // Health check
 app.get("/", (req, res) => {
   logger.info("Health check endpoint hit");
   res.status(200).json({ message: "Express.js backend is running 🚀" });
 });
+
 // Start the server
 const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
