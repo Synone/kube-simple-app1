@@ -19,6 +19,19 @@ spec:
           imagePullPolicy: IfNotPresent
           ports:
             - containerPort: 5432
+          livenessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 10
+            periodSeconds: 10
+            failureThreshold: 5
+
+          readinessProbe:
+            tcpSocket:
+              port: 5432
+            initialDelaySeconds: 5
+            periodSeconds: 5
+            failureThreshold: 3
           env:
             - name: POSTGRES_DB
               valueFrom:

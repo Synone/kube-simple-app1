@@ -9,13 +9,13 @@ app.use(cors());
 const TEMP_DB_STRING = "postgres://appuser:s3cr3t@localhost:5432/appdb";
 // PostgreSQL connection pool using env vars (injected via Kubernetes secrets or local .env)
 const pool = new Pool({
-  // host: process.env.DB_HOST || "localhost",
-  // port: process.env.DB_PORT || 5432,
-  connectionString: TEMP_DB_STRING,
-  // user: process.env.DB_USER || "appuser",
-  // password: process.env.DB_PASSWORD, // 👈 Password injected via Kubernetes Secret
-  // database: process.env.DB_NAME || "appdb",
-  // ssl: false,
+  host: process.env.DB_HOST || "localhost",
+  port: process.env.DB_PORT || 5432,
+  // connectionString: TEMP_DB_STRING,
+  user: process.env.DB_USER || "appuser",
+  password: process.env.DB_PASSWORD, // 👈 Password injected via Kubernetes Secret
+  database: process.env.DB_NAME || "appdb",
+  ssl: false,
 });
 
 // Get all contacts
