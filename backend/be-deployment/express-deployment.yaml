@@ -22,7 +22,7 @@ spec:
     spec:
       containers:
         - name: express-api
-          image: sonyne/simple-express:v3.2.0
+          image: sonyne/simple-express:f1.0.0
           ports:
             - containerPort: 3000
           resources:

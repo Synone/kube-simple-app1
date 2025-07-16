@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: simple-angular-app-deployment
-          image: sonyne/simple-app:v3.0.0 # 👈 Your Docker Hub image
+          image: sonyne/simple-app:vf1.0.0
           ports:
             - containerPort: 80
