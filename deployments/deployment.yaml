@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: simple-app
-          image: sonyne/simple-app:f2.0.0
+          image: sonyne/simple-app:f1.0.0
           ports:
             - containerPort: 80
