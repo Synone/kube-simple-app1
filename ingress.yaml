@@ -5,41 +5,24 @@ metadata:
   namespace: kube
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
-    - host: kube.local
-      http:
-        paths:
-          - path: /api(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: express-api-service
-                port:
-                  number: 80
-          - path: /assets(/|$)(.*)
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: angular-frontend-service
-                port:
-                  number: 80
-            annotations:
-              nginx.ingress.kubernetes.io/rewrite-target: /$2
-          - path: /(.*\.(js|css|ico|png|jpg|jpeg|gif|svg|woff|woff2|ttf|eot))
-            pathType: ImplementationSpecific
-            backend:
-              service:
-                name: angular-frontend-service
-                port:
-                  number: 80
-            annotations:
-              nginx.ingress.kubernetes.io/rewrite-target: /$1
-          - path: /
-            pathType: Prefix
-            backend:
-              service:
-                name: angular-frontend-service
-                port:
-                  number: 80
+  - host: kube.local
+    http:
+      paths:
+      - path: /api(/|$)(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: express-api-service
+            port:
+              number: 80
+      - path: /(.*)
+        pathType: ImplementationSpecific
+        backend:
+          service:
+            name: angular-frontend-service
+            port:
+              number: 80
