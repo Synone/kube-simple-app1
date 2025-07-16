@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: simple-angular-app-deployment
+  name: simple-app
   namespace: kube
 spec:
   replicas: 2
   selector:
     matchLabels:
-      app: simple-angular-app-deployment
+      app: simple-app
   template:
     metadata:
       labels:
-        app: simple-angular-app-deployment
+        app: simple-app
     spec:
       containers:
-        - name: simple-angular-app-deployment
-          image: sonyne/simple-app:f1.0.0
+        - name: simple-app
+          image: sonyne/simple-app:f2.0.0
           ports:
             - containerPort: 80

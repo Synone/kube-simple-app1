@@ -5,7 +5,7 @@ metadata:
   namespace: kube # Ensure this matches the namespace of your deploymen
 spec:
   selector:
-    app: simple-angular-app-deployment
+    app: simple-app
   ports:
     - protocol: TCP
       port: 80
