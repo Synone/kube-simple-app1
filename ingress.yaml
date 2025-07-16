@@ -5,7 +5,6 @@ metadata:
   namespace: kube
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /
-    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
@@ -13,7 +12,7 @@ spec:
       http:
         paths:
           # Rewrite only applies here
-          - path: /api(/|$)(.*)
+          - path: /api
             pathType: ImplementationSpecific
             backend:
               service:
