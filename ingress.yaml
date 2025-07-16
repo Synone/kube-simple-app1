@@ -5,19 +5,23 @@ metadata:
   namespace: kube
   annotations:
     nginx.ingress.kubernetes.io/rewrite-target: /$2
+    nginx.ingress.kubernetes.io/use-regex: "true"
 spec:
   ingressClassName: nginx
   rules:
     - host: kube.local
       http:
         paths:
+          # Backend API path with rewrite
           - path: /api(/|$)(.*)
             pathType: ImplementationSpecific
-            backend:  
+            backend:
               service:
                 name: express-api-service
                 port:
                   number: 80
+
+          # Frontend (Angular) app
           - path: /
             pathType: Prefix
             backend:
