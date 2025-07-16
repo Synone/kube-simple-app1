@@ -15,6 +15,6 @@ spec:
     spec:
       containers:
         - name: simple-angular-app-deployment
-          image: sonyne/simple-app:vf1.0.0
+          image: sonyne/simple-app:f1.0.0
           ports:
             - containerPort: 80
